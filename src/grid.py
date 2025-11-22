@@ -52,3 +52,23 @@ def draw_grid(surface, grid):
         x = c * size                         # X position of the line
         pygame.draw.line(surface, GRID_LINE, (x, 0),
                          (x, height))  # From top to bottom
+
+
+def get_node_at_pos(grid, pos):
+    # Convert mouse pixel position to grid indices
+    x, y = pos                               # Mouse coordinates (pixels)
+    if not grid:                             # If grid is empty, return None
+        return None
+
+    size = grid[0][0].size                   # Size of each cell in pixels
+    col = x // size                          # Column index from x
+    row = y // size                          # Row index from y
+
+    rows = len(grid)                         # Total rows
+    cols = len(grid[0])                      # Total columns
+
+    # Check if row and col are inside the grid
+    if 0 <= row < rows and 0 <= col < cols:  # If inside bounds
+        return grid[row][col]                # Return the node at that position
+
+    return None                              # If outside, return None

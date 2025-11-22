@@ -1,6 +1,6 @@
 # import helper modules from src files and pygame library
 import pygame
-from src.grid import create_grid, draw_grid
+from src.grid import create_grid, draw_grid, get_node_at_pos
 
 # Window size in pixels
 WIDTH, HEIGHT = 800, 600          # Width and height of the window
@@ -30,7 +30,18 @@ def main():
     while running:               # Main game loop
         for event in pygame.event.get():        # Get all events from pygame (keyboard, mouse, quit)
             if event.type == pygame.QUIT:       # If user clicks the close button
-                running = False                 # Set running to False to exit the loop
+                running = False
+
+            if event.type == pygame.MOUSEBUTTONDOWN:   # Any mouse button pressed
+                mouse_pos = pygame.mouse.get_pos()     # Get mouse position in pixels
+                # Find which node was clicked
+                node = get_node_at_pos(grid, mouse_pos)
+
+                if node is not None:                  # Only if click was inside grid
+                    if event.button == 1:             # Left click
+                        node.make_wall()              # Turn that cell into a wall
+                    elif event.button == 3:           # Right click
+                        node.reset()                        # Set running to False to exit the loop
 
         # Fill the whole screen with a dark background color
         screen.fill((20, 20, 20))
