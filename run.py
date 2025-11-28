@@ -18,13 +18,10 @@ def main():
     pygame.init()
 
     # Create the main window
-    # Set the window size (Width and height as specified above)
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption(
-        "Maze Solver Visualizer")  # Set the window title
+    pygame.display.set_caption("Maze Solver Visualizer")  # Set the window title
 
     # Create the 2D grid of nodes
-    # Build a 2D list of Node objects
     grid = create_grid(ROWS, COLS, CELL_SIZE)
 
     # Are we in "start place" mode?
@@ -36,48 +33,80 @@ def main():
     current_start = None
     current_end = None
 
-    running = True               # Flag to keep the game loop running
-    while running:               # Main game loop
-        for event in pygame.event.get():        # Get all events from pygame (keyboard, mouse, quit)
-            if event.type == pygame.QUIT:       # If user clicks the close button
+    # Are we currently dragging to draw or erase walls?
+    drawing_walls = False
+    erasing_walls = False
+
+    running = True
+    while running:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
                 running = False
 
-            if event.type == pygame.KEYDOWN:  # this is for basically checking if the key s is pressed if it is pressed then we place the start node
+            if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_s:
                     placing_start = True
                     placing_end = False
 
-                if event.key == pygame.K_e:  # this is for basically checking if the key e is pressed if it is pressed then we place the end node
+                if event.key == pygame.K_e:
                     placing_end = True
                     placing_start = False
 
             # Mouse clicks
             if event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_pos = pygame.mouse.get_pos()          # Get mouse x, y
-                # Find which node was clicked
+                mouse_pos = pygame.mouse.get_pos()
                 node = get_node_at_pos(grid, mouse_pos)
 
                 if node:
-                    if event.button == 1:                   # Left click
-                        if placing_start:                   # If S was pressed
-                            if current_start:               # If a start already exists
-                                current_start.reset()       # Clear old start
-                            node.make_start()               # Make new start
-                            current_start = node            # Save reference
-                            placing_start = False           # Exit start mode
+                    if event.button == 1:
+                        if placing_start:
+                            if current_start:
+                                current_start.reset()
+                            node.make_start()
+                            current_start = node
+                            placing_start = False
 
-                        elif placing_end:                   # If E was pressed
-                            if current_end:                 # If an end already exists
-                                current_end.reset()         # Clear old end
-                            node.make_end()                 # Make new end
-                            current_end = node              # Save reference
-                            placing_end = False             # Exit end mode
+                        elif placing_end:
+                            if current_end:
+                                current_end.reset()
+                            node.make_end()
+                            current_end = node
+                            placing_end = False
 
                         else:
-                            node.make_wall()                # Normal click → make a wall
+                            node.make_wall()       # Normal click → make a wall
+                            drawing_walls = True   # Start drag-to-draw mode
 
-                    elif event.button == 3:                 # Right click → clear
-                        node.reset()                        # Reset node state
+                    elif event.button == 3:        # Right click → clear
+                        node.reset()
+                        if node == current_start:
+                            current_start = None
+                        if node == current_end:
+                            current_end = None
+                        erasing_walls = True       # Start drag-to-erase mode
+
+            # Mouse button released
+            if event.type == pygame.MOUSEBUTTONUP:
+                if event.button == 1:
+                    drawing_walls = False
+                if event.button == 3:
+                    erasing_walls = False
+
+            # Mouse movement while a button might be held
+            if event.type == pygame.MOUSEMOTION:
+                mouse_buttons = pygame.mouse.get_pressed()
+                mouse_pos = pygame.mouse.get_pos()
+                node = get_node_at_pos(grid, mouse_pos)
+
+                if node:
+                    # If we are in drawing mode and left button is still held
+                    if drawing_walls and mouse_buttons[0]:
+                        if node.state not in (START, END):
+                            node.make_wall()
+
+                    # If we are in erasing mode and right button is still held
+                    if erasing_walls and mouse_buttons[2]:
+                        node.reset()
                         if node == current_start:
                             current_start = None
                         if node == current_end:
@@ -85,14 +114,12 @@ def main():
 
         # Fill the whole screen with a dark background color
         screen.fill((20, 20, 20))
-        # Draw all cells and the grid lines
-        draw_grid(screen, grid)  # (we pass the surface grid!)
-        # Update the window with whatever we just drew
+        draw_grid(screen, grid)
         pygame.display.update()
 
-    pygame.quit()                              # Cleanly close all pygame modules
+    pygame.quit()
 
 
 # Only run main() if this file is run directly, not imported
 if __name__ == "__main__":
-    main()                                     # Start the program
+    main()
