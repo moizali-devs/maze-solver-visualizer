@@ -1,50 +1,64 @@
-import pygame                      # Import pygame so we can use its drawing functions
+import pygame                                      # For drawing rectangles
 
 # States a cell can have
-EMPTY = "empty"                                   # Normal cell
-WALL = "wall"                                     # Barrier
-START = "start"                                   # Start point
-END = "end"                                       # End/goal point
+EMPTY = "empty"                                    # Normal cell
+WALL = "wall"                                      # Barrier
+START = "start"                                    # Start point
+END = "end"                                        # Goal point
+VISITED = "visited"                                # Explored by the algorithm
+PATH = "path"                                      # Final shortest path cell
 
 
 class Node:
     def __init__(self, row, col, size):
-        self.row = row             # Row index of this node in the grid
-        self.col = col             # Column index of this node in the grid
-        # Pixel size of the box (one side and each side is the same because square)
-        self.size = size
-        self.state = EMPTY
+        self.row = row                              # Row index
+        self.col = col                              # Column index
+        self.size = size                            # Pixel size of the square cell
+        self.state = EMPTY                          # Default state is empty
 
     def make_wall(self):
-        self.state = WALL                  # Change state to wall
+        self.state = WALL                           # Turn this cell into a wall
 
     def make_start(self):
-        self.state = START                  # Mark cell as start
+        self.state = START                          # Mark as start cell
 
     def make_end(self):
-        self.state = END                    # Mark cell as goal
+        self.state = END                            # Mark as end cell
+
+    def make_visited(self):
+        # Only mark as visited if it is not start or end
+        if self.state not in (START, END):
+            self.state = VISITED                    # Mark as visited by the algorithm
+
+    def make_path(self):
+        # Only mark as path if it is not start or end
+        if self.state not in (START, END):
+            self.state = PATH                       # Mark as part of final path
 
     def reset(self):
-        self.state = EMPTY                 # Change state back to empty
+        self.state = EMPTY                          # Reset back to empty
 
     def draw(self, surface, base_color):
-        if self.state == WALL:             # If the cell is a wall
-            color = (180, 180, 180)        # Wall Color
+        # Decide color based on state
+        if self.state == WALL:
+            color = (180, 180, 180)                 # Light gray for walls
         elif self.state == START:
-            color = (0, 200, 0)          # Green color for start
+            color = (0, 200, 0)                     # Green for start
         elif self.state == END:
-            color = (200, 0, 0)          # Red for end
+            color = (200, 0, 0)                     # Red for end
+        elif self.state == VISITED:
+            color = (0, 120, 200)                   # Blue-ish for visited cells
+        elif self.state == PATH:
+            color = (255, 215, 0)                   # Yellow for final path
         else:
-            color = base_color             # Use the base color for empty cells
+            color = base_color                      # Dark base for empty cells
 
-    # Convert row and column to actual x, y pixel coordinates
-    # X position in pixels (columns go left to right)
-        x = self.col * self.size
-    # Y position in pixels (rows go top to bottom)
-        y = self.row * self.size
+        # Convert row/col location into pixel coordinates
+        x = self.col * self.size                    # X position in pixels
+        y = self.row * self.size                    # Y position in pixels
 
-    # Create a pygame rectangle for this cell (rect=rectangle)
-        rect = pygame.Rect(x, y, self.size, self.size)  # (x, y, width, height)
+        # Define the rectangle representing this cell
+        rect = pygame.Rect(x, y, self.size, self.size)
 
-    # Draw the filled rectangle on the given surface (we use simple pygame function for this)
+        # Draw the rectangle on the given surface
         pygame.draw.rect(surface, color, rect)
