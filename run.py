@@ -1,8 +1,9 @@
 # import helper modules from src files and pygame library
 import pygame
-from src.grid import create_grid, draw_grid, get_node_at_pos   # Grid helpers
-from src.node import START, END                                # State names
-from src.algorithms.dfs import dfs                             # Our DFS function
+from src.grid import create_grid, draw_grid, get_node_at_pos      # Grid helpers
+from src.node import START, END                                   # State names
+from src.algorithms.dfs import dfs                                # DFS algorithm
+from src.algorithms.astar import astar                            # A* algorithm
 
 # Window size in pixels
 WIDTH, HEIGHT = 800, 600          # Width and height of the window
@@ -41,7 +42,7 @@ def main():
     current_start = None
     current_end = None
 
-    # Drag states for walls (from previous step)
+    # Drag states for walls
     drawing_walls = False                # Are we dragging to draw walls?
     erasing_walls = False                # Are we dragging to erase walls?
 
@@ -62,9 +63,12 @@ def main():
                     placing_start = False
 
                 if event.key == pygame.K_d:   # Press D to run DFS
-                    # Only run DFS if both start and end exist
-                    if current_start and current_end:
+                    if current_start and current_end:                # Ensure both exist
                         dfs(lambda: redraw(screen, grid), grid, current_start, current_end)
+
+                if event.key == pygame.K_a:   # Press A to run A*
+                    if current_start and current_end:                # Ensure both exist
+                        astar(lambda: redraw(screen, grid), grid, current_start, current_end)
 
             # Mouse button pressed
             if event.type == pygame.MOUSEBUTTONDOWN:
