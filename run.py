@@ -1,139 +1,182 @@
-# import helper modules from src files and pygame library
+# run.py
 import pygame
-from src.grid import create_grid, draw_grid, get_node_at_pos      # Grid helpers
-from src.node import START, END                                   # State names
-from src.algorithms.dfs import dfs                                # DFS algorithm
-from src.algorithms.astar import astar                            # A* algorithm
 
-# Window size in pixels
-WIDTH, HEIGHT = 800, 600          # Width and height of the window
+from src.ui.start_screen import start_screen
+from src.ui.topbar import TopBar
+from src.ui.themes import DARK_THEME, LIGHT_THEME
+from src.ui.help_overlay import draw_help_overlay
+from src.grid import create_grid, draw_grid, get_node_at_pos
+from src.node import START, END, WALL, VISITED, PATH
+from src.algorithms.dfs import dfs
+from src.algorithms.astar import astar
 
-# Grid settings
-ROWS, COLS = 30, 40               # Number of rows and columns in the grid
-
-# Size of each cell in pixels based on width and number of columns
+# Window and grid settings
+WIDTH, HEIGHT = 800, 600
+ROWS, COLS = 30, 40
 CELL_SIZE = WIDTH // COLS
 
 
-def redraw(screen, grid):
-    """Helper function to clear screen, draw grid, and update display."""
-    screen.fill((20, 20, 20))         # Fill background with dark color
-    draw_grid(screen, grid)           # Draw cells and grid lines
-    pygame.display.update()           # Refresh the window
+def redraw(screen, grid, theme, topbar, show_help, current_algorithm):
+    """Redraw the full screen."""
+    screen.fill(theme["BACKGROUND"])
+    draw_grid(screen, grid, theme)
+    topbar.draw(screen, theme)
+    if show_help:
+        draw_help_overlay(screen, theme, current_algorithm)
+    pygame.display.update()
+
+
+def place_default_start_end(grid):
+    """Place start near left and end near right at middle row."""
+    rows = len(grid)
+    cols = len(grid[0])
+
+    mid_row = rows // 2
+
+    start_node = grid[mid_row][2]
+    end_node = grid[mid_row][cols - 3]
+
+    start_node.make_start()
+    end_node.make_end()
+
+    return start_node, end_node
+
+
+def clear_walls_and_paths(grid, keep_start_end=True):
+    """Clear walls, visited, and path states."""
+    for row in grid:
+        for node in row:
+            if keep_start_end and node.state in (START, END):
+                continue
+            if node.state in (WALL, VISITED, PATH):
+                node.reset()
+
+
+def clear_all(grid):
+    """Reset the whole grid and return new default start and end."""
+    for row in grid:
+        for node in row:
+            node.reset()
+    return place_default_start_end(grid)
 
 
 def main():
-    # Initialize all pygame modules so we can use them
     pygame.init()
-
-    # Create the main window with specified size
     screen = pygame.display.set_mode((WIDTH, HEIGHT))
-    pygame.display.set_caption("Maze Solver Visualizer")  # Set the window title
+    pygame.display.set_caption("Maze Solver Visualizer")
 
-    # Build a 2D list of Node objects
+    # Show start menu
+    if not start_screen(screen):
+        return
+
+    # Initial theme and algorithm
+    current_theme = DARK_THEME
+    current_algorithm = "dfs"
+
+    # Build grid and default start/end
     grid = create_grid(ROWS, COLS, CELL_SIZE)
+    current_start, current_end = place_default_start_end(grid)
 
-    # Are we in "start place" mode?
+    # Control bar and state flags
+    topbar = TopBar(WIDTH)
     placing_start = False
-    # Are we in "end place" mode?
     placing_end = False
+    drawing_walls = False
+    erasing_walls = False
+    show_help = False
 
-    # Keep reference to the start node and end node
-    current_start = None
-    current_end = None
-
-    # Drag states for walls
-    drawing_walls = False                # Are we dragging to draw walls?
-    erasing_walls = False                # Are we dragging to erase walls?
-
-    running = True                       # Flag to keep the game loop running
-    while running:                       # Main game loop
-        for event in pygame.event.get():  # Get all events from pygame
-            if event.type == pygame.QUIT:  # If user clicks the close button
+    running = True
+    while running:
+        for event in pygame.event.get():
+            # Quit
+            if event.type == pygame.QUIT:
                 running = False
 
-            # Keyboard events
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_s:   # Press S to place start
-                    placing_start = True
-                    placing_end = False
+            # Top bar actions
+            action = topbar.handle_event(event)
+            if action == "select_dfs":
+                current_algorithm = "dfs"
+            elif action == "select_astar":
+                current_algorithm = "astar"
+            elif action == "set_start":
+                placing_start = True
+                placing_end = False
+            elif action == "set_end":
+                placing_end = True
+                placing_start = False
+            elif action == "visualize":
+                if current_start and current_end:
+                    if current_algorithm == "dfs":
+                        dfs(lambda: redraw(screen, grid, current_theme, topbar, show_help, current_algorithm),
+                            grid, current_start, current_end)
+                    else:
+                        astar(lambda: redraw(screen, grid, current_theme, topbar, show_help, current_algorithm),
+                              grid, current_start, current_end)
+            elif action == "clear_walls":
+                clear_walls_and_paths(grid, keep_start_end=True)
+            elif action == "clear_all":
+                current_start, current_end = clear_all(grid)
+            elif action == "toggle_theme":
+                current_theme = LIGHT_THEME if current_theme is DARK_THEME else DARK_THEME
+            elif action == "toggle_help":
+                show_help = not show_help
 
-                if event.key == pygame.K_e:   # Press E to place end
-                    placing_end = True
-                    placing_start = False
-
-                if event.key == pygame.K_d:   # Press D to run DFS
-                    if current_start and current_end:                # Ensure both exist
-                        dfs(lambda: redraw(screen, grid), grid, current_start, current_end)
-
-                if event.key == pygame.K_a:   # Press A to run A*
-                    if current_start and current_end:                # Ensure both exist
-                        astar(lambda: redraw(screen, grid), grid, current_start, current_end)
-
-            # Mouse button pressed
+            # Mouse input for grid
             if event.type == pygame.MOUSEBUTTONDOWN:
-                mouse_pos = pygame.mouse.get_pos()           # Get mouse x, y
-                node = get_node_at_pos(grid, mouse_pos)      # Find which node was clicked
+                mouse_pos = pygame.mouse.get_pos()
+                node = get_node_at_pos(grid, mouse_pos)
 
                 if node:
-                    if event.button == 1:                    # Left click
-                        if placing_start:                    # If S was pressed before
-                            if current_start:                # If a start already exists
-                                current_start.reset()        # Clear old start
-                            node.make_start()                # Make new start
-                            current_start = node             # Save reference
-                            placing_start = False            # Exit start mode
-
-                        elif placing_end:                    # If E was pressed before
-                            if current_end:                  # If an end already exists
-                                current_end.reset()          # Clear old end
-                            node.make_end()                  # Make new end
-                            current_end = node               # Save reference
-                            placing_end = False              # Exit end mode
-
+                    if event.button == 1:  # Left click
+                        if placing_start:
+                            if current_start:
+                                current_start.reset()
+                            node.make_start()
+                            current_start = node
+                            placing_start = False
+                        elif placing_end:
+                            if current_end:
+                                current_end.reset()
+                            node.make_end()
+                            current_end = node
+                            placing_end = False
                         else:
-                            node.make_wall()                 # Normal click → make a wall
-                            drawing_walls = True             # Start drag-to-draw mode
-
-                    elif event.button == 3:                  # Right click → clear
-                        node.reset()                         # Reset node state
+                            node.make_wall()
+                            drawing_walls = True
+                    elif event.button == 3:  # Right click
                         if node == current_start:
                             current_start = None
                         if node == current_end:
                             current_end = None
-                        erasing_walls = True                 # Start drag-to-erase mode
+                        node.reset()
+                        erasing_walls = True
 
-            # Mouse button released
             if event.type == pygame.MOUSEBUTTONUP:
-                if event.button == 1:                        # Left released
-                    drawing_walls = False                    # Stop drawing
-                if event.button == 3:                        # Right released
-                    erasing_walls = False                    # Stop erasing
+                if event.button == 1:
+                    drawing_walls = False
+                if event.button == 3:
+                    erasing_walls = False
 
-            # Mouse moved
             if event.type == pygame.MOUSEMOTION:
-                mouse_buttons = pygame.mouse.get_pressed()   # Check which buttons are held
-                mouse_pos = pygame.mouse.get_pos()           # Current mouse position
-                node = get_node_at_pos(grid, mouse_pos)      # Node under mouse
+                mouse_buttons = pygame.mouse.get_pressed()
+                mouse_pos = pygame.mouse.get_pos()
+                node = get_node_at_pos(grid, mouse_pos)
 
                 if node:
-                    if drawing_walls and mouse_buttons[0]:   # Drag drawing with left
-                        if node.state not in (START, END):   # Do not override start/end
+                    if drawing_walls and mouse_buttons[0]:
+                        if node.state not in (START, END):
                             node.make_wall()
-
-                    if erasing_walls and mouse_buttons[2]:   # Drag erasing with right
-                        node.reset()
+                    if erasing_walls and mouse_buttons[2]:
                         if node == current_start:
                             current_start = None
                         if node == current_end:
                             current_end = None
+                        node.reset()
 
-        # Draw everything each frame
-        redraw(screen, grid)
+        redraw(screen, grid, current_theme, topbar, show_help, current_algorithm)
 
-    pygame.quit()                           # Cleanly close all pygame modules
+    pygame.quit()
 
 
-# Only run main() if this file is run directly, not imported
 if __name__ == "__main__":
-    main()                                  # Start the program
+    main()

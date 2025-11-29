@@ -1,64 +1,62 @@
-import pygame                                      # For drawing rectangles
+# src/node.py
+import pygame  # For drawing rectangles
 
-# States a cell can have
-EMPTY = "empty"                                    # Normal cell
-WALL = "wall"                                      # Barrier
-START = "start"                                    # Start point
-END = "end"                                        # Goal point
-VISITED = "visited"                                # Explored by the algorithm
-PATH = "path"                                      # Final shortest path cell
+# States that each cell can have
+EMPTY = "empty"
+WALL = "wall"
+START = "start"
+END = "end"
+VISITED = "visited"
+PATH = "path"
 
 
 class Node:
     def __init__(self, row, col, size):
-        self.row = row                              # Row index
-        self.col = col                              # Column index
-        self.size = size                            # Pixel size of the square cell
-        self.state = EMPTY                          # Default state is empty
+        self.row = row                # Row index in grid
+        self.col = col                # Column index in grid
+        self.size = size              # Cell size in pixels
+        self.state = EMPTY            # Default state
 
+    # State helper methods
     def make_wall(self):
-        self.state = WALL                           # Turn this cell into a wall
+        self.state = WALL
 
     def make_start(self):
-        self.state = START                          # Mark as start cell
+        self.state = START
 
     def make_end(self):
-        self.state = END                            # Mark as end cell
+        self.state = END
 
     def make_visited(self):
-        # Only mark as visited if it is not start or end
         if self.state not in (START, END):
-            self.state = VISITED                    # Mark as visited by the algorithm
+            self.state = VISITED
 
     def make_path(self):
-        # Only mark as path if it is not start or end
         if self.state not in (START, END):
-            self.state = PATH                       # Mark as part of final path
+            self.state = PATH
 
     def reset(self):
-        self.state = EMPTY                          # Reset back to empty
+        self.state = EMPTY
 
-    def draw(self, surface, base_color):
-        # Decide color based on state
+    def draw(self, surface, theme, top_offset):
+        """Draw this node on the given surface using the theme colors."""
+        # Pick color based on current state
         if self.state == WALL:
-            color = (180, 180, 180)                 # Light gray for walls
+            color = theme["WALL"]
         elif self.state == START:
-            color = (0, 200, 0)                     # Green for start
+            color = theme["START"]
         elif self.state == END:
-            color = (200, 0, 0)                     # Red for end
+            color = theme["END"]
         elif self.state == VISITED:
-            color = (0, 120, 200)                   # Blue-ish for visited cells
+            color = theme["VISITED"]
         elif self.state == PATH:
-            color = (255, 215, 0)                   # Yellow for final path
+            color = theme["PATH"]
         else:
-            color = base_color                      # Dark base for empty cells
+            color = theme["EMPTY"]
 
-        # Convert row/col location into pixel coordinates
-        x = self.col * self.size                    # X position in pixels
-        y = self.row * self.size                    # Y position in pixels
+        # Convert grid position to screen position
+        x = self.col * self.size                       # X coordinate
+        y = top_offset + self.row * self.size          # Y coordinate with top margin
 
-        # Define the rectangle representing this cell
-        rect = pygame.Rect(x, y, self.size, self.size)
-
-        # Draw the rectangle on the given surface
-        pygame.draw.rect(surface, color, rect)
+        rect = pygame.Rect(x, y, self.size, self.size) # Rectangle for this cell
+        pygame.draw.rect(surface, color, rect)         # Draw the filled cell
