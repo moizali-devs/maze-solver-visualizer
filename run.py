@@ -5,15 +5,18 @@ from src.ui.start_screen import start_screen
 from src.ui.topbar import TopBar
 from src.ui.themes import DARK_THEME, LIGHT_THEME
 from src.ui.help_overlay import draw_help_overlay
-from src.grid import create_grid, draw_grid, get_node_at_pos
+from src.grid import create_grid, draw_grid, get_node_at_pos, TOP_OFFSET
 from src.node import START, END, WALL, VISITED, PATH
 from src.algorithms.dfs import dfs
 from src.algorithms.astar import astar
 
 # Window and grid settings
-WIDTH, HEIGHT = 800, 600
-ROWS, COLS = 30, 40
-CELL_SIZE = WIDTH // COLS
+WIDTH, HEIGHT = 1280, 800          # change this to whatever resolution you want
+ROWS, COLS = 30, 40                # logical grid size
+GRID_HEIGHT = HEIGHT - TOP_OFFSET  # space available for the grid under the top bar
+
+# Cell size is chosen so the grid fits both height and width
+CELL_SIZE = min(WIDTH // COLS, GRID_HEIGHT // ROWS)
 
 
 def redraw(screen, grid, theme, topbar, show_help, current_algorithm):
@@ -107,11 +110,23 @@ def main():
             elif action == "visualize":
                 if current_start and current_end:
                     if current_algorithm == "dfs":
-                        dfs(lambda: redraw(screen, grid, current_theme, topbar, show_help, current_algorithm),
-                            grid, current_start, current_end)
+                        dfs(
+                            lambda: redraw(
+                                screen, grid, current_theme, topbar, show_help, current_algorithm
+                            ),
+                            grid,
+                            current_start,
+                            current_end,
+                        )
                     else:
-                        astar(lambda: redraw(screen, grid, current_theme, topbar, show_help, current_algorithm),
-                              grid, current_start, current_end)
+                        astar(
+                            lambda: redraw(
+                                screen, grid, current_theme, topbar, show_help, current_algorithm
+                            ),
+                            grid,
+                            current_start,
+                            current_end,
+                        )
             elif action == "clear_walls":
                 clear_walls_and_paths(grid, keep_start_end=True)
             elif action == "clear_all":

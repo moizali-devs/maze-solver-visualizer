@@ -3,8 +3,7 @@ import pygame
 from .node import Node
 
 # Space at the top reserved for the control bar
-TOP_OFFSET = 80  # pixels
-
+TOP_OFFSET = 110  # pixels  (match your top bar height)
 
 def create_grid(rows, cols, size):
     """Create a 2D list of Node objects."""
@@ -40,7 +39,12 @@ def draw_grid(surface, grid, theme):
     # Grid lines (vertical)
     for c in range(cols + 1):
         x = c * cell_size
-        pygame.draw.line(surface, theme["GRID_LINE"], (x, TOP_OFFSET), (x, TOP_OFFSET + rows * cell_size))
+        pygame.draw.line(
+            surface,
+            theme["GRID_LINE"],
+            (x, TOP_OFFSET),
+            (x, TOP_OFFSET + rows * cell_size),
+        )
 
 
 def get_node_at_pos(grid, pos):
