@@ -9,15 +9,43 @@ def draw_text(surface, text, size, color, x, y, font_name="bahnschrift", bold=Fa
     surface.blit(render, rect)
 
 
+def draw_help_popup(surface):
+    width, height = surface.get_size()
+
+    overlay = pygame.Surface((width, height), pygame.SRCALPHA)
+    overlay.fill((0, 0, 0, 170))
+    surface.blit(overlay, (0, 0))
+
+    box_w, box_h = 560, 300
+    box = pygame.Rect(0, 0, box_w, box_h)
+    box.center = (width // 2, height // 2)
+
+    pygame.draw.rect(surface, (38, 37, 35), box, border_radius=16)
+    pygame.draw.rect(surface, (90, 88, 84), box, width=2, border_radius=16)
+
+    def line(txt, y, size=18, bold=False):
+        font = pygame.font.SysFont("bahnschrift", size, bold=bold)
+        surf = font.render(txt, True, (245, 245, 245))
+        surface.blit(surf, (box.left + 22, y))
+
+    line("Help", box.top + 18, size=26, bold=True)
+    line("Controls:", box.top + 62, size=18, bold=True)
+    line("Left click and drag: draw walls", box.top + 95, size=16)
+    line("Right click and drag: erase walls", box.top + 120, size=16)
+    line("Use Set Start / Set End buttons to place nodes", box.top + 145, size=16)
+    line("Press Visualize to run DFS or A*", box.top + 170, size=16)
+
+    line("Close:", box.top + 220, size=18, bold=True)
+    line("Press ESC or click the HELP button again", box.top + 250, size=16)
+
+
 def start_screen(surface):
     WIDTH, HEIGHT = surface.get_size()
 
-    # Load and scale Saitama PNG
     saitama = pygame.image.load("assets/start_screen/saitama.png")
     saitama = pygame.transform.scale(saitama, (260, 260))
     saitama_rect = saitama.get_rect()
 
-    # Colors
     BG = (28, 27, 25)
     LEFT_PANEL = (193, 155, 52)
     CARD_BG = (38, 37, 35)
@@ -25,22 +53,16 @@ def start_screen(surface):
     RED = (215, 52, 52)
     RED_HOVER = (240, 80, 80)
     TEXT_MAIN = (245, 245, 245)
-    TEXT_SUB = (210, 210, 210)
-    ACCENT = (255, 210, 90)
 
-    # Left panel wider for clean padding
     left_panel_rect = pygame.Rect(0, 0, int(WIDTH * 0.40), HEIGHT)
 
-    # Card
     card_width = int(WIDTH * 0.45)
     card_height = int(HEIGHT * 0.62)
     card_rect = pygame.Rect(0, 0, card_width, card_height)
     card_rect.center = (int(WIDTH * 0.70), HEIGHT // 2)
 
-    # Saitama positioned nicely on left
     saitama_rect.bottomleft = (left_panel_rect.left + 30, HEIGHT - 30)
 
-    # Buttons
     BUTTON_WIDTH, BUTTON_HEIGHT = 260, 54
     BUTTON_GAP = 18
 
@@ -55,23 +77,21 @@ def start_screen(surface):
     help_rect.center = (buttons_center_x, first_button_y + BUTTON_HEIGHT + BUTTON_GAP)
     exit_rect.center = (buttons_center_x, first_button_y + 2 * (BUTTON_HEIGHT + BUTTON_GAP))
 
+    show_help = False
+
     running = True
     while running:
         surface.fill(BG)
 
-        # Left panel
         pygame.draw.rect(surface, LEFT_PANEL, left_panel_rect)
 
-        # Title on left panel
         draw_text(surface, "MAZE VISUALIZER", 28, (35, 24, 10),
                   left_panel_rect.centerx, int(HEIGHT * 0.14), bold=True)
         draw_text(surface, "DFS and A*", 20, (35, 24, 10),
                   left_panel_rect.centerx, int(HEIGHT * 0.19))
 
-        # Saitama
         surface.blit(saitama, saitama_rect)
 
-        # Main card
         pygame.draw.rect(surface, CARD_BORDER, card_rect, border_radius=18)
         inner_card = card_rect.inflate(-6, -6)
         pygame.draw.rect(surface, CARD_BG, inner_card, border_radius=16)
@@ -79,49 +99,40 @@ def start_screen(surface):
         draw_text(surface, "Maze Solver Visualizer", 34, TEXT_MAIN,
                   inner_card.centerx, inner_card.top + 55, bold=True)
 
-        # Mouse tracking
         mouse_pos = pygame.mouse.get_pos()
-        click = pygame.mouse.get_pressed()
 
-        # Button drawing function
         def draw_button(rect, base_color, label):
             is_hover = rect.collidepoint(mouse_pos)
             color = RED_HOVER if is_hover else base_color
-
             pygame.draw.rect(surface, (90, 25, 25), rect.move(0, 3), border_radius=12)
             pygame.draw.rect(surface, color, rect, border_radius=12)
-            draw_text(surface, label, 24, TEXT_MAIN,
-                      rect.centerx, rect.centery, bold=True)
+            draw_text(surface, label, 24, TEXT_MAIN, rect.centerx, rect.centery, bold=True)
 
-        # Buttons
         draw_button(start_rect, RED, "START")
         draw_button(help_rect, RED, "HELP")
         draw_button(exit_rect, RED, "EXIT")
 
-        # Bottom tagline – your original line
-        # draw_text(
-        #     surface,
-        #     "Finding the shortest path? That’s just common sense.",
-        #     16,
-        #     ACCENT,
-        #     inner_card.centerx,
-        #     inner_card.bottom -30,   # moved inside the card
-        # )
+        if show_help:
+            draw_help_popup(surface)
 
-        # Click handling
-        if click[0]:
-            if start_rect.collidepoint(mouse_pos):
-                return True
-            if exit_rect.collidepoint(mouse_pos):
-                pygame.quit()
-                sys.exit()
-            if help_rect.collidepoint(mouse_pos):
-                print("Help clicked (future expansion)")
-
-        # Quit event
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
                 sys.exit()
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    show_help = False
+
+            if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
+                if start_rect.collidepoint(mouse_pos) and not show_help:
+                    return True
+
+                if exit_rect.collidepoint(mouse_pos) and not show_help:
+                    pygame.quit()
+                    sys.exit()
+
+                if help_rect.collidepoint(mouse_pos):
+                    show_help = not show_help
 
         pygame.display.update()

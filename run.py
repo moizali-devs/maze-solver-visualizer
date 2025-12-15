@@ -11,21 +11,22 @@ from src.algorithms.dfs import dfs
 from src.algorithms.astar import astar
 
 # Window and grid settings
-WIDTH, HEIGHT = 1280, 800          # change this to whatever resolution you want
-ROWS, COLS = 30, 40                # logical grid size
-GRID_HEIGHT = HEIGHT - TOP_OFFSET  # space available for the grid under the top bar
-
-# Cell size is chosen so the grid fits both height and width
-CELL_SIZE = min(WIDTH // COLS, GRID_HEIGHT // ROWS)
+WIDTH, HEIGHT = 1280, 800  # You can change this resolution
+ROWS = 30                  # Number of rows in the grid
+# Cell size based on available vertical space under the top bar
+CELL_SIZE = (HEIGHT - TOP_OFFSET) // ROWS
+COLS = WIDTH // CELL_SIZE        # Number of columns derived from width
 
 
 def redraw(screen, grid, theme, topbar, show_help, current_algorithm):
-    """Redraw the full screen."""
     screen.fill(theme["BACKGROUND"])
     draw_grid(screen, grid, theme)
-    topbar.draw(screen, theme)
+
+    # Draw help overlay first so topbar stays clickable on top
     if show_help:
         draw_help_overlay(screen, theme, current_algorithm)
+
+    topbar.draw(screen, theme)
     pygame.display.update()
 
 
@@ -91,6 +92,9 @@ def main():
     running = True
     while running:
         for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    show_help = False
             # Quit
             if event.type == pygame.QUIT:
                 running = False
