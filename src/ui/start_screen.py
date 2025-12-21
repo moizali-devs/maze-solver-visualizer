@@ -1,5 +1,21 @@
 import pygame
 import sys
+import os
+
+# Utility functions for resource loading, text rendering, help popup, and start screen.
+# These are used for managing assets and UI elements in the application when executing from different environments.
+def resource_path(relative_path: str) -> str:
+    """
+    Get absolute path to resource, works for dev and for PyInstaller.
+    """
+    # When running as a bundled app
+    if getattr(sys, "frozen", False) and hasattr(sys, "_MEIPASS"):
+        base_path = sys._MEIPASS
+    else:
+        # When running from source with `python run.py`
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
 
 
 def draw_text(surface, text, size, color, x, y, font_name="bahnschrift", bold=False):
@@ -42,7 +58,7 @@ def draw_help_popup(surface):
 def start_screen(surface):
     WIDTH, HEIGHT = surface.get_size()
 
-    saitama = pygame.image.load("assets/start_screen/saitama.png")
+    saitama = pygame.image.load(resource_path("assets/start_screen/saitama.png"))
     saitama = pygame.transform.scale(saitama, (260, 260))
     saitama_rect = saitama.get_rect()
 

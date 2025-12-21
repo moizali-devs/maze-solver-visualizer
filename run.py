@@ -176,7 +176,7 @@ def main():
                 if event.button == 3:
                     erasing_walls = False
 
-            if event.type == pygame.MOUSEMOTION:
+            if event.type == pygame.MOUSEMOTION: 
                 mouse_buttons = pygame.mouse.get_pressed()
                 mouse_pos = pygame.mouse.get_pos()
                 node = get_node_at_pos(grid, mouse_pos)
