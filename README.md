@@ -1,93 +1,92 @@
-Maze Solver Visualizer
-An interactive maze and pathfinding visualizer built using Python and Pygame.
-This project visually demonstrates how classic search and pathfinding algorithms explore a grid in real time.
+<h1 align="center">Maze Solver Visualizer</h1>
 
-It allows users to draw walls, set start and end nodes, and observe how different algorithms behave step by step.
+<p align="center">
+  <strong>Interactive Pathfinding and Algorithm Visualization</strong><br>
+  <em>Built using Python and Pygame</em>
+</p>
 
-Motivation
+<p align="center">
+  Algorithms · Visualization · Interactive Grid · Clean UI
+</p>
 
-Pathfinding algorithms are often taught theoretically, which makes them hard to visualize.
-This project was built to bridge that gap by providing a clean, interactive, and visual way to understand how DFS and A star work internally.
+<hr>
 
-Features
+<h2>About the Project</h2>
 
-Interactive grid based maze editor
+<p>
+Maze Solver Visualizer is an interactive application designed to visually demonstrate how classical
+pathfinding algorithms explore a grid environment in real time.
+</p>
 
-Real time algorithm visualization
+<p>
+Instead of relying only on theory or pseudocode, this project allows users to draw obstacles,
+place start and end points, and observe how algorithms traverse the maze step by step.
+</p>
 
-Depth First Search implementation
+<hr>
 
-A star shortest path algorithm with Manhattan heuristic
+<h2>Features</h2>
 
-Click and drag wall drawing
+<ul>
+  <li>Interactive grid based maze editor</li>
+  <li>Real time pathfinding visualization</li>
+  <li>Depth First Search implementation</li>
+  <li>A star shortest path algorithm using Manhattan heuristic</li>
+  <li>Click and drag wall drawing and erasing</li>
+  <li>Start and End node placement</li>
+  <li>Dark and Light theme toggle</li>
+  <li>Built in help overlay</li>
+  <li>Smooth animation and clean navigation bar</li>
+</ul>
 
-Start and End node placement
+<hr>
 
-Dark and Light theme toggle
+<h2>Algorithms Implemented</h2>
 
-In app help overlay explaining controls and algorithms
+<h3>Depth First Search</h3>
 
-Smooth animations for exploration and final path
+<ul>
+  <li>Explores deeply along one path before backtracking</li>
+  <li>Uses a stack based approach</li>
+  <li>Does not guarantee the shortest path</li>
+  <li>Useful for understanding deep traversal behavior</li>
+</ul>
 
-Clean UI with top control bar
+<h3>A Star Pathfinding</h3>
 
-Cross platform support
+<ul>
+  <li>Uses cost plus heuristic evaluation</li>
+  <li>Manhattan distance heuristic</li>
+  <li>Guarantees the shortest path when one exists</li>
+  <li>More efficient and goal oriented search</li>
+</ul>
 
-Algorithms
-Depth First Search
+<hr>
 
-Explores one path fully before backtracking
+<h2>Controls</h2>
 
-Uses a stack based approach
+<ul>
+  <li><strong>Left Click and Drag</strong> Draw walls</li>
+  <li><strong>Right Click and Drag</strong> Erase walls</li>
+  <li><strong>Set Start</strong> Place starting node</li>
+  <li><strong>Set End</strong> Place destination node</li>
+  <li><strong>DFS or A star</strong> Select algorithm</li>
+  <li><strong>Visualize</strong> Run selected algorithm</li>
+  <li><strong>Theme</strong> Toggle dark and light mode</li>
+  <li><strong>Help</strong> Open in app instructions</li>
+  <li><strong>ESC</strong> Close help overlay</li>
+</ul>
 
-Does not guarantee the shortest path
+<hr>
 
-Useful for understanding deep exploration behavior
+<h2>Project Structure</h2>
 
-A Star Pathfinding
-
-Uses cost plus heuristic evaluation
-
-Manhattan distance heuristic
-
-Guarantees shortest path when one exists
-
-Efficient and goal directed search
-
-Controls
-
-Left Click and Drag
-Draw walls
-
-Right Click and Drag
-Erase walls
-
-Set Start
-Place the starting node
-
-Set End
-Place the destination node
-
-DFS or A star
-Select algorithm
-
-Visualize
-Run selected algorithm
-
-Theme
-Toggle dark and light mode
-
-Help
-Open in app instructions
-
-ESC
-Close help overlay
-
-Project Structure
+<pre>
 maze-solver-visualizer/
 │
 ├── run.py
 ├── requirements.txt
+│
 ├── assets/
 │   └── start_screen/
 │       └── saitama.png
@@ -105,48 +104,75 @@ maze-solver-visualizer/
 │   │
 │   ├── grid.py
 │   └── node.py
+</pre>
 
-Installation
-Requirements
+<hr>
 
-Python 3.9 or higher
+<h2>Installation</h2>
 
-Pygame
+<p><strong>Requirements</strong></p>
 
-Install dependencies
+<ul>
+  <li>Python 3.9 or higher</li>
+  <li>Pygame</li>
+</ul>
 
+<pre>
 pip install -r requirements.txt
+</pre>
 
-Running the Project
+<hr>
+
+<h2>Running the Application</h2>
+
+<pre>
 python run.py
+</pre>
 
+<p>
+The start screen will appear first, from where you can launch the visualizer.
+</p>
 
-The start screen will appear, from where you can launch the visualizer.
+<hr>
 
-Educational Use
+<h2>Screenshots</h2>
 
-This project is suitable for
+<p>
+You may add screenshots to enhance GitHub presentation.
+</p>
 
-Computer Science students
+<pre>
+screenshots/
+├── start_screen.png
+  <img width="900" height="400" alt="image" src="https://github.com/user-attachments/assets/8905f2ee-ae9e-4925-bda7-b78a18051921" />
 
-Algorithm visualization demos
+├── dfs_visualization.png
+  <img width="900" height="400" alt="image" src="https://github.com/user-attachments/assets/c3a0fb56-8bac-4934-9f5d-d54113717ad5" />
 
-AI and search algorithm coursework
+├── help_overlay.png
+  <img width="900" height="400" alt="image" src="https://github.com/user-attachments/assets/2fa44f45-486d-4e7b-86f1-9c17ab9525a1" />
 
-Teaching DFS and A star intuitively
+└── astar_visualization.png├──
+  <img width="900" height="400" alt="image" src="https://github.com/user-attachments/assets/1f3278d0-4bc4-4171-bddb-0f2d5b8fb014" />
 
-Future Improvements
+  
 
-Add BFS and Dijkstra
+</pre>
+<hr>
 
-Adjustable animation speed slider
+<h2>Educational Use</h2>
 
-Weighted grids
+<ul>
+  <li>Computer Science students</li>
+  <li>Algorithm visualization demonstrations</li>
+  <li>AI and search algorithm coursework</li>
+  <li>Understanding DFS versus heuristic based search</li>
+</ul>
 
-Diagonal movement option
+<hr>
 
-Save and load mazes
+<h2>License</h2>
 
-License
-
-This project is open source and free to use for educational purposes.
+<p>
+This project is open source and intended for educational and learning purposes.
+</p>
