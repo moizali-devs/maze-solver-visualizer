@@ -1,6 +1,13 @@
 <h1 align="center">Maze Solver Visualizer</h1>
 
 <p align="center">
+  <a href="https://github.com/moizali-devs/maze-solver-visualizer/actions/workflows/lint.yml"><img alt="Lint status" src="https://github.com/moizali-devs/maze-solver-visualizer/actions/workflows/lint.yml/badge.svg"></a>
+  <a href="https://github.com/moizali-devs/maze-solver-visualizer/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/moizali-devs/maze-solver-visualizer"></a>
+  <a href="LICENSE"><img alt="License" src="https://img.shields.io/github/license/moizali-devs/maze-solver-visualizer"></a>
+  <img alt="Python version" src="https://img.shields.io/badge/python-3.9%2B-blue">
+</p>
+
+<p align="center">
   <strong>Interactive Pathfinding and Algorithm Visualization</strong><br>
   <em>Built using Python and Pygame</em>
 </p>
@@ -108,7 +115,17 @@ maze-solver-visualizer/
 
 <hr>
 
-<h2>Installation</h2>
+<h2>Download</h2>
+
+<p>
+Prebuilt executables for macOS, Windows, and Linux are published on the
+<a href="https://github.com/moizali-devs/maze-solver-visualizer/releases/latest">Releases</a> page.
+No Python installation required.
+</p>
+
+<hr>
+
+<h2>Installation (from source)</h2>
 
 <p><strong>Requirements</strong></p>
 
@@ -131,6 +148,21 @@ python run.py
 
 <p>
 The start screen will appear first, from where you can launch the visualizer.
+</p>
+
+<hr>
+
+<h2>Building an Executable</h2>
+
+<pre>
+pip install -r requirements-build.txt
+pyinstaller run.spec
+</pre>
+
+<p>
+The built app will be placed in the <code>dist/</code> folder. Cross-platform executables
+are also built automatically and attached to each
+<a href="https://github.com/moizali-devs/maze-solver-visualizer/releases">Release</a> via GitHub Actions.
 </p>
 
 <hr>

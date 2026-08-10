@@ -1,6 +1,8 @@
-import pygame
-import sys
 import os
+import sys
+
+import pygame
+
 
 # Utility functions for resource loading, text rendering, help popup, and start screen.
 # These are used for managing assets and UI elements in the application when executing from different environments.

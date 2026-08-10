@@ -1,5 +1,6 @@
 # src/ui/topbar.py
 import pygame
+
 from src.grid import TOP_OFFSET
 
 

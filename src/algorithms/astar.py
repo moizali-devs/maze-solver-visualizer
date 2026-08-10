@@ -1,6 +1,8 @@
-import pygame                                      # For small animation delays
-from heapq import heappush, heappop               # Priority queue for A* open set
-from src.node import WALL, VISITED, PATH, START, END  # State names for clarity
+from heapq import heappop, heappush  # Priority queue for A* open set
+
+import pygame  # For small animation delays
+
+from src.node import END, PATH, START, VISITED, WALL  # State names for clarity
 
 
 def get_neighbors(grid, node):

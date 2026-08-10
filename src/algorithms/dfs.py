@@ -1,5 +1,6 @@
-import pygame                                      # For small delays
-from src.node import WALL, VISITED, PATH          # Use state names from Node
+import pygame  # For small delays
+
+from src.node import WALL  # Use state names from Node
 
 
 def get_neighbors(grid, node):

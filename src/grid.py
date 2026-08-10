@@ -1,5 +1,6 @@
 # src/grid.py
 import pygame
+
 from .node import Node
 
 # Space at the top reserved for the control bar
@@ -24,7 +25,7 @@ def draw_grid(surface, grid, theme):
     rows = len(grid)
     cols = len(grid[0])
     cell_size = grid[0][0].size
-    width, height = surface.get_size()
+    width, _height = surface.get_size()
 
     # Draw cells
     for row in grid:

@@ -1,14 +1,14 @@
 # run.py
 import pygame
 
-from src.ui.start_screen import start_screen
-from src.ui.topbar import TopBar
-from src.ui.themes import DARK_THEME, LIGHT_THEME
-from src.ui.help_overlay import draw_help_overlay
-from src.grid import create_grid, draw_grid, get_node_at_pos, TOP_OFFSET
-from src.node import START, END, WALL, VISITED, PATH
-from src.algorithms.dfs import dfs
 from src.algorithms.astar import astar
+from src.algorithms.dfs import dfs
+from src.grid import TOP_OFFSET, create_grid, draw_grid, get_node_at_pos
+from src.node import END, PATH, START, VISITED, WALL
+from src.ui.help_overlay import draw_help_overlay
+from src.ui.start_screen import start_screen
+from src.ui.themes import DARK_THEME, LIGHT_THEME
+from src.ui.topbar import TopBar
 
 # Window and grid settings
 WIDTH, HEIGHT = 1280, 800  # You can change this resolution

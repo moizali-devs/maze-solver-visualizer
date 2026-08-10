@@ -1,0 +1,49 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        include:
+          - os: macos-latest
+            asset_name: MazeSolverVisualizer-macos.zip
+          - os: windows-latest
+            asset_name: MazeSolverVisualizer-windows.zip
+          - os: ubuntu-latest
+            asset_name: MazeSolverVisualizer-linux.zip
+
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install build dependencies
+        run: pip install -r requirements-build.txt
+
+      - name: Build executable
+        run: pyinstaller run.spec
+
+      - name: Zip build output (Unix)
+        if: runner.os != 'Windows'
+        run: |
+          cd dist
+          zip -r ../${{ matrix.asset_name }} .
+
+      - name: Zip build output (Windows)
+        if: runner.os == 'Windows'
+        run: Compress-Archive -Path dist\* -DestinationPath ${{ matrix.asset_name }}
+
+      - name: Upload release asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ${{ matrix.asset_name }}

@@ -1,0 +1,8 @@
+[tool.ruff]
+line-length = 110
+
+[tool.ruff.lint]
+# B023: lambdas below are invoked synchronously within the same loop
+# iteration (not stored for later), so late-binding isn't an issue here.
+# SIM102: nested ifs are kept flat for readability in the event-handling code.
+ignore = ["B023", "SIM102"]
