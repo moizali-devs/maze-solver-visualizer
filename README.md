@@ -137,27 +137,26 @@ The start screen will appear first, from where you can launch the visualizer.
 
 <h2>Screenshots</h2>
 
-<p>
-You may add screenshots to enhance GitHub presentation.
+<p align="center">
+  <strong>Start Screen</strong><br>
+  <img width="900" height="400" alt="Start screen" src="https://github.com/user-attachments/assets/8905f2ee-ae9e-4925-bda7-b78a18051921" />
 </p>
 
-<pre>
-screenshots/
-├── start_screen.png
-  <img width="900" height="400" alt="image" src="https://github.com/user-attachments/assets/8905f2ee-ae9e-4925-bda7-b78a18051921" />
+<p align="center">
+  <strong>DFS Visualization</strong><br>
+  <img width="900" height="400" alt="DFS visualization" src="https://github.com/user-attachments/assets/c3a0fb56-8bac-4934-9f5d-d54113717ad5" />
+</p>
 
-├── dfs_visualization.png
-  <img width="900" height="400" alt="image" src="https://github.com/user-attachments/assets/c3a0fb56-8bac-4934-9f5d-d54113717ad5" />
+<p align="center">
+  <strong>Help Overlay</strong><br>
+  <img width="900" height="400" alt="Help overlay" src="https://github.com/user-attachments/assets/2fa44f45-486d-4e7b-86f1-9c17ab9525a1" />
+</p>
 
-├── help_overlay.png
-  <img width="900" height="400" alt="image" src="https://github.com/user-attachments/assets/2fa44f45-486d-4e7b-86f1-9c17ab9525a1" />
+<p align="center">
+  <strong>A* Visualization</strong><br>
+  <img width="900" height="400" alt="A* visualization" src="https://github.com/user-attachments/assets/1f3278d0-4bc4-4171-bddb-0f2d5b8fb014" />
+</p>
 
-└── astar_visualization.png├──
-  <img width="900" height="400" alt="image" src="https://github.com/user-attachments/assets/1f3278d0-4bc4-4171-bddb-0f2d5b8fb014" />
-
-  
-
-</pre>
 <hr>
 
 <h2>Educational Use</h2>
@@ -174,5 +173,5 @@ screenshots/
 <h2>License</h2>
 
 <p>
-This project is open source and intended for educational and learning purposes.
+This project is open source under the <a href="LICENSE">MIT License</a>.
 </p>

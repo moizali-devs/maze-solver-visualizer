@@ -1,3 +1,0 @@
-([('run',
-   '/Users/moizali/dev/Projects/Portfolio/maze-solver-visualizer/dist/run',
-   'EXECUTABLE')],)
