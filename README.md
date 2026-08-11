@@ -1,209 +1,130 @@
-<h1 align="center">Maze Solver Visualizer</h1>
+# Maze Solver Visualizer
 
-<p align="center">
-  <a href="https://github.com/moizali-devs/maze-solver-visualizer/actions/workflows/lint.yml"><img alt="Lint status" src="https://github.com/moizali-devs/maze-solver-visualizer/actions/workflows/lint.yml/badge.svg"></a>
-  <a href="https://github.com/moizali-devs/maze-solver-visualizer/releases/latest"><img alt="Latest release" src="https://img.shields.io/github/v/release/moizali-devs/maze-solver-visualizer"></a>
-  <a href="LICENSE"><img alt="License" src="https://img.shields.io/github/license/moizali-devs/maze-solver-visualizer"></a>
-  <img alt="Python version" src="https://img.shields.io/badge/python-3.9%2B-blue">
-</p>
+Interactive pathfinding and algorithm visualization built with Python and Pygame.
 
-<p align="center">
-  <strong>Interactive Pathfinding and Algorithm Visualization</strong><br>
-  <em>Built using Python and Pygame</em>
-</p>
+## About the Project
 
-<p align="center">
-  Algorithms · Visualization · Interactive Grid · Clean UI
-</p>
+Maze Solver Visualizer is an interactive application that visually demonstrates how classical pathfinding algorithms explore a grid environment in real time.
 
-<hr>
+Instead of relying only on theory or pseudocode, this project lets users draw obstacles, place start and end points, and observe how algorithms traverse the maze step by step.
 
-<h2>About the Project</h2>
+## Features
 
-<p>
-Maze Solver Visualizer is an interactive application designed to visually demonstrate how classical
-pathfinding algorithms explore a grid environment in real time.
-</p>
+- Interactive grid-based maze editor
+- Real-time pathfinding visualization
+- Depth First Search implementation
+- A* shortest path algorithm using Manhattan heuristic
+- Click and drag wall drawing and erasing
+- Start and End node placement
+- Dark and light theme toggle
+- Built-in help overlay
+- Smooth animation and clean navigation bar
 
-<p>
-Instead of relying only on theory or pseudocode, this project allows users to draw obstacles,
-place start and end points, and observe how algorithms traverse the maze step by step.
-</p>
+## Algorithms Implemented
 
-<hr>
+### Depth First Search
 
-<h2>Features</h2>
+- Explores deeply along one path before backtracking
+- Uses a stack-based approach
+- Does not guarantee the shortest path
+- Useful for understanding deep traversal behavior
 
-<ul>
-  <li>Interactive grid based maze editor</li>
-  <li>Real time pathfinding visualization</li>
-  <li>Depth First Search implementation</li>
-  <li>A star shortest path algorithm using Manhattan heuristic</li>
-  <li>Click and drag wall drawing and erasing</li>
-  <li>Start and End node placement</li>
-  <li>Dark and Light theme toggle</li>
-  <li>Built in help overlay</li>
-  <li>Smooth animation and clean navigation bar</li>
-</ul>
+### A* Pathfinding
 
-<hr>
+- Uses cost plus heuristic evaluation
+- Manhattan distance heuristic
+- Guarantees the shortest path when one exists
+- More efficient and goal-oriented search
 
-<h2>Algorithms Implemented</h2>
+## Controls
 
-<h3>Depth First Search</h3>
+| Control | Action |
+|---|---|
+| Left Click and Drag | Draw walls |
+| Right Click and Drag | Erase walls |
+| Set Start | Place starting node |
+| Set End | Place destination node |
+| DFS or A* | Select algorithm |
+| Visualize | Run selected algorithm |
+| Theme | Toggle dark and light mode |
+| Help | Open in-app instructions |
+| ESC | Close help overlay |
 
-<ul>
-  <li>Explores deeply along one path before backtracking</li>
-  <li>Uses a stack based approach</li>
-  <li>Does not guarantee the shortest path</li>
-  <li>Useful for understanding deep traversal behavior</li>
-</ul>
+## Project Structure
 
-<h3>A Star Pathfinding</h3>
-
-<ul>
-  <li>Uses cost plus heuristic evaluation</li>
-  <li>Manhattan distance heuristic</li>
-  <li>Guarantees the shortest path when one exists</li>
-  <li>More efficient and goal oriented search</li>
-</ul>
-
-<hr>
-
-<h2>Controls</h2>
-
-<ul>
-  <li><strong>Left Click and Drag</strong> Draw walls</li>
-  <li><strong>Right Click and Drag</strong> Erase walls</li>
-  <li><strong>Set Start</strong> Place starting node</li>
-  <li><strong>Set End</strong> Place destination node</li>
-  <li><strong>DFS or A star</strong> Select algorithm</li>
-  <li><strong>Visualize</strong> Run selected algorithm</li>
-  <li><strong>Theme</strong> Toggle dark and light mode</li>
-  <li><strong>Help</strong> Open in app instructions</li>
-  <li><strong>ESC</strong> Close help overlay</li>
-</ul>
-
-<hr>
-
-<h2>Project Structure</h2>
-
-<pre>
+```
 maze-solver-visualizer/
-│
 ├── run.py
 ├── requirements.txt
-│
 ├── assets/
 │   └── start_screen/
 │       └── saitama.png
-│
 ├── src/
 │   ├── algorithms/
 │   │   ├── dfs.py
 │   │   └── astar.py
-│   │
 │   ├── ui/
 │   │   ├── topbar.py
 │   │   ├── start_screen.py
 │   │   ├── help_overlay.py
 │   │   └── themes.py
-│   │
 │   ├── grid.py
 │   └── node.py
-</pre>
+```
 
-<hr>
+## Download
 
-<h2>Download</h2>
+Prebuilt executables for macOS, Windows, and Linux are published on the [Releases](https://github.com/moizali-devs/maze-solver-visualizer/releases/latest) page. No Python installation required.
 
-<p>
-Prebuilt executables for macOS, Windows, and Linux are published on the
-<a href="https://github.com/moizali-devs/maze-solver-visualizer/releases/latest">Releases</a> page.
-No Python installation required.
-</p>
+## Installation (from source)
 
-<hr>
+Requirements:
 
-<h2>Installation (from source)</h2>
+- Python 3.9 or higher
+- Pygame
 
-<p><strong>Requirements</strong></p>
-
-<ul>
-  <li>Python 3.9 or higher</li>
-  <li>Pygame</li>
-</ul>
-
-<pre>
+```bash
 pip install -r requirements.txt
-</pre>
+```
 
-<hr>
+## Running the Application
 
-<h2>Running the Application</h2>
-
-<pre>
+```bash
 python run.py
-</pre>
+```
 
-<p>
-The start screen will appear first, from where you can launch the visualizer.
-</p>
+The start screen appears first, from where you can launch the visualizer.
 
-<hr>
+## Building an Executable
 
-<h2>Building an Executable</h2>
-
-<pre>
+```bash
 pip install -r requirements-build.txt
 pyinstaller run.spec
-</pre>
+```
 
-<p>
-The built app will be placed in the <code>dist/</code> folder. Cross-platform executables
-are also built automatically and attached to each
-<a href="https://github.com/moizali-devs/maze-solver-visualizer/releases">Release</a> via GitHub Actions.
-</p>
+The built app is placed in the `dist/` folder. Cross-platform executables are also built automatically and attached to each [Release](https://github.com/moizali-devs/maze-solver-visualizer/releases) via GitHub Actions.
 
-<hr>
+## Screenshots
 
-<h2>Screenshots</h2>
+**Start Screen**
+![Start screen](https://github.com/user-attachments/assets/8905f2ee-ae9e-4925-bda7-b78a18051921)
 
-<p align="center">
-  <strong>Start Screen</strong><br>
-  <img width="900" height="400" alt="Start screen" src="https://github.com/user-attachments/assets/8905f2ee-ae9e-4925-bda7-b78a18051921" />
-</p>
+**DFS Visualization**
+![DFS visualization](https://github.com/user-attachments/assets/c3a0fb56-8bac-4934-9f5d-d54113717ad5)
 
-<p align="center">
-  <strong>DFS Visualization</strong><br>
-  <img width="900" height="400" alt="DFS visualization" src="https://github.com/user-attachments/assets/c3a0fb56-8bac-4934-9f5d-d54113717ad5" />
-</p>
+**Help Overlay**
+![Help overlay](https://github.com/user-attachments/assets/2fa44f45-486d-4e7b-86f1-9c17ab9525a1)
 
-<p align="center">
-  <strong>Help Overlay</strong><br>
-  <img width="900" height="400" alt="Help overlay" src="https://github.com/user-attachments/assets/2fa44f45-486d-4e7b-86f1-9c17ab9525a1" />
-</p>
+**A* Visualization**
+![A* visualization](https://github.com/user-attachments/assets/1f3278d0-4bc4-4171-bddb-0f2d5b8fb014)
 
-<p align="center">
-  <strong>A* Visualization</strong><br>
-  <img width="900" height="400" alt="A* visualization" src="https://github.com/user-attachments/assets/1f3278d0-4bc4-4171-bddb-0f2d5b8fb014" />
-</p>
+## Educational Use
 
-<hr>
+- Computer Science students
+- Algorithm visualization demonstrations
+- AI and search algorithm coursework
+- Understanding DFS versus heuristic-based search
 
-<h2>Educational Use</h2>
+## License
 
-<ul>
-  <li>Computer Science students</li>
-  <li>Algorithm visualization demonstrations</li>
-  <li>AI and search algorithm coursework</li>
-  <li>Understanding DFS versus heuristic based search</li>
-</ul>
-
-<hr>
-
-<h2>License</h2>
-
-<p>
-This project is open source under the <a href="LICENSE">MIT License</a>.
-</p>
+This project is open source under the [MIT License](LICENSE).
